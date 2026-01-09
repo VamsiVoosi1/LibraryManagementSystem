@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Add / Edit Student</title>
+
+    <!-- Icons -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: #f4f6f9;
+            color: #1f2937;
+        }
+
+        /* ===== HEADER ===== */
+        header {
+            background: #1f2937;
+            padding: 15px 30px; /* SAME AS INDEX */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
+
+        nav a {
+            color: #d1d5db;
+            margin-left: 20px;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        nav a:hover {
+            color: white;
+        }
+
+        /* ===== MAIN ===== */
+        .container {
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+        }
+
+        /* ===== FORM CARD ===== */
+        .card {
+            background: white;
+            padding: 35px 40px;
+            width: 420px;
+            border-radius: 14px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+        }
+
+        .card h2 {
+            margin-top: 0;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        label {
+            font-weight: 600;
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 8px;
+            border: 1px solid #d1d5db;
+            margin-bottom: 18px;
+            font-size: 14px;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 2px rgba(37,99,235,0.15);
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            background: #2563eb;
+            color: white;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #1e40af;
+        }
+
+
+    </style>
+</head>
+
+<body>
+
+<!-- ===== HEADER ===== -->
+<header>
+    <h2>📚 Library Management System</h2>
+    <nav>
+        <a th:href="@{/}"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
+        <a th:href="@{/books}"><i class="fa-solid fa-book"></i> Books</a>
+        <a th:href="@{/students}"><i class="fa-solid fa-user-graduate"></i> Students</a>
+        <a th:href="@{/issue}"><i class="fa-solid fa-right-left"></i> Issue/Return</a>
+    </nav>
+</header>
+
+<!-- ===== MAIN ===== -->
+<div class="container">
+
+    <div class="card">
+
+        <h2 th:text="${student.id == null ? 'Add Student' : 'Edit Student'}"></h2>
+
+        <form th:action="@{/students/save}"
+              th:object="${student}"
+              method="post">
+
+            <input type="hidden" th:field="*{id}" />
+
+            <label>Name</label>
+            <input type="text" th:field="*{name}" required />
+
+            <label>Email</label>
+            <input type="email" th:field="*{email}" required />
+
+            <button type="submit">
+                <i class="fa-solid fa-floppy-disk"></i> Save
+            </button>
+        </form>
+
+
+
+    </div>
+</div>
+
+</body>
+</html>

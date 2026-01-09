@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Issue / Return Book</title>
+
+    <!-- Icons -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: #f4f6f9;
+            color: #1f2937;
+        }
+
+        /* ===== HEADER ===== */
+        header {
+            background: #1f2937;
+            padding: 15px 30px; /* SAME HEIGHT AS INDEX */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
+
+        nav a {
+            color: #d1d5db;
+            margin-left: 20px;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        nav a:hover {
+            color: white;
+        }
+
+        /* ===== MAIN ===== */
+        .container {
+            padding: 40px;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+        }
+
+        /* ===== CARD ===== */
+        .card {
+            background: white;
+            padding: 25px 30px 30px;
+            border-radius: 14px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            max-width: 600px;
+            margin-bottom: 40px;
+        }
+
+        label {
+            font-weight: 500;
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #d1d5db;
+            margin-bottom: 20px;
+        }
+
+        button {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 15px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        button:hover {
+            background: #1e40af;
+        }
+
+        /* ===== MESSAGES ===== */
+        .error {
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .success {
+            background: #ecfdf5;
+            color: #065f46;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        /* ===== TABLE ===== */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+        }
+
+        thead {
+            background: #e5e7eb;
+        }
+
+        th, td {
+            padding: 14px 16px;
+            text-align: left;
+        }
+
+        tbody tr:hover {
+            background: #f9fafb;
+        }
+
+        .action {
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .action:hover {
+            text-decoration: underline;
+        }
+
+        .disabled {
+            color: gray;
+        }
+
+        .empty {
+            color: gray;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- ===== HEADER ===== -->
+<header>
+    <h2>📚 Library Management System</h2>
+    <nav>
+        <a th:href="@{/}"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
+        <a th:href="@{/books}"><i class="fa-solid fa-book"></i> Books</a>
+        <a th:href="@{/students}"><i class="fa-solid fa-user-graduate"></i> Students</a>
+        <a th:href="@{/issue}"><i class="fa-solid fa-right-left"></i> Issue/Return</a>
+    </nav>
+</header>
+
+<!-- ===== MAIN ===== -->
+<div class="container">
+
+    <h2>Issue Book</h2>
+
+    <!-- Error Message -->
+    <div th:if="${error}" class="error">
+        <i class="fa-solid fa-circle-xmark"></i>
+        <span th:text="${error}"></span>
+    </div>
+
+    <!-- Success Message -->
+    <div th:if="${success}" class="success">
+        <i class="fa-solid fa-circle-check"></i>
+        <span th:text="${success}"></span>
+    </div>
+
+    <!-- ===== ISSUE FORM ===== -->
+    <div class="card">
+        <form th:action="@{/issue/book}" method="post">
+
+            <label>Student</label>
+            <select name="studentId" required>
+                <option value="">-- Select Student --</option>
+                <option th:each="s : ${students}"
+                        th:value="${s.id}"
+                        th:text="${s.name}">
+                </option>
+            </select>
+
+            <label>Book</label>
+            <select name="bookId" required>
+                <option value="">-- Select Book --</option>
+                <option th:each="b : ${books}"
+                        th:value="${b.id}"
+                        th:text="${b.title + (b.quantity > 0 ? ' (Available: ' + b.quantity + ')' : ' (Not Available)')}"
+                        th:disabled="${b.quantity == 0}">
+                </option>
+            </select>
+
+            <button type="submit">Issue Book</button>
+        </form>
+    </div>
+
+    <!-- ===== ISSUED BOOKS ===== -->
+    <h2>Issued Books</h2>
+
+    <div th:if="${#lists.isEmpty(issued)}" class="empty">
+        No issued books found.
+    </div>
+
+    <table th:if="${!#lists.isEmpty(issued)}">
+        <thead>
+        <tr>
+            <th>Student</th>
+            <th>Book</th>
+            <th>Issue Date</th>
+            <th>Return Date</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="i : ${issued}">
+            <td th:text="${i.student.name}"></td>
+            <td th:text="${i.book.title}"></td>
+
+            <td th:text="${#temporals.format(i.issueDateTime, 'dd-MM-yyyy HH:mm:ss')}"></td>
+
+            <td th:text="${i.returnDateTime != null
+                ? #temporals.format(i.returnDateTime, 'dd-MM-yyyy HH:mm:ss')
+                : '-'}">
+            </td>
+
+            <td>
+                <span th:if="${!i.returned}" style="color: green;">Issued</span>
+                <span th:if="${i.returned}" style="color: gray;">Returned</span>
+            </td>
+
+            <td>
+                <a th:if="${!i.returned}"
+                   class="action"
+                   th:href="@{/issue/return/{id}(id=${i.id})}"
+                   onclick="return confirm('Confirm book return?')">
+                    Return
+                </a>
+
+                <span th:if="${i.returned}" class="disabled">—</span>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+
+</body>
+</html>

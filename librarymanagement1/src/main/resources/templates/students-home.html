@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Students Management</title>
+
+  <!-- Icons -->
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+  <style>
+    body {
+        margin: 0;
+        font-family: "Segoe UI", Arial, sans-serif;
+        background: #f4f6f9;
+        color: #1f2937;
+    }
+
+    /* ===== HEADER ===== */
+        header {
+            background: #1f2937;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
+
+    nav a {
+        color: #d1d5db;
+        margin-left: 20px;
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+    nav a:hover {
+        color: white;
+    }
+
+    /* ===== MAIN ===== */
+    .container {
+        padding: 40px;
+    }
+
+    .title {
+        font-size: 24px;
+        margin-bottom: 25px;
+    }
+
+    /* ===== CARDS ===== */
+    .cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 25px;
+        max-width: 800px;
+    }
+
+    .card {
+        background: white;
+        padding: 30px;
+        border-radius: 14px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        text-align: center;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 14px 30px rgba(0,0,0,0.15);
+    }
+
+    .card i {
+        font-size: 34px;
+        color: #2563eb;
+        margin-bottom: 15px;
+    }
+
+    .card h3 {
+        margin: 10px 0;
+    }
+
+    .card p {
+        color: #6b7280;
+        font-size: 15px;
+    }
+
+    .card a {
+        display: inline-block;
+        margin-top: 15px;
+        padding: 10px 20px;
+        border-radius: 8px;
+        background: #2563eb;
+        color: white;
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+    .card a:hover {
+        background: #1e40af;
+    }
+
+    footer {
+        margin-top: 60px;
+        text-align: center;
+        font-size: 13px;
+        color: #6b7280;
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- ===== HEADER ===== -->
+<header>
+  <h2>📚 Library Management System</h2>
+  <nav>
+    <a th:href="@{/}"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
+    <a th:href="@{/books}"><i class="fa-solid fa-book"></i> Books</a>
+    <a th:href="@{/students}"><i class="fa-solid fa-user-graduate"></i> Students</a>
+    <a th:href="@{/issue}"><i class="fa-solid fa-right-left"></i> Issue/Return</a>
+  </nav>
+</header>
+
+<!-- ===== MAIN ===== -->
+<div class="container">
+
+  <div class="title">
+    Manage student records and access 📋
+  </div>
+
+  <div class="cards">
+
+    <!-- Add Student -->
+    <div class="card">
+      <i class="fa-solid fa-user-plus"></i>
+      <h3>Add Student</h3>
+      <p>Register new students into the system.</p>
+      <a th:href="@{/students/add}">Add Student</a>
+    </div>
+
+    <!-- View Students -->
+    <div class="card">
+      <i class="fa-solid fa-users"></i>
+      <h3>View All Students</h3>
+      <p>View, edit or delete student records.</p>
+      <a th:href="@{/students/view}">View Students</a>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  © 2026 Library Management System • Students Module
+</footer>
+
+</body>
+</html>
